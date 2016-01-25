@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import ai
-from game import Game
+from vindinium.ai import ai
+from vindinium.bots import BaseBot
+from vindinium.models.game import Game
 
 DIRS = ["North", "East", "South", "West", "Stay"]
 ACTIONS = ["Go mine", "Go beer", "Go enemy"]
 
 
-class Bot:
+class RusselBot(BaseBot):
     def __init__(self):
         self.running = True
         self.state = {}
@@ -31,9 +32,8 @@ class Bot:
         self.last_pos = None
         self.ai = ai.AI()
 
-    def move(self, state):
+    def move(self):
         """Return store data provided by A.I and return selected move"""
-        self.state = state
         # Store status for later report
         try:
             self.hero_last_move = self.hero_move
@@ -50,19 +50,18 @@ class Bot:
             pass
         self.game = Game(self.state)
 
-        print self.last_nearest_enemy_pos
         ################################################################
         # Put your call to AI code here
         ################################################################
 
         self.ai.process(self.game)
         self.path_to_goal, \
-            self.action, \
-            self.decision, \
-            self.hero_move, \
-            self.nearest_enemy_pos, \
-            self.nearest_mine_pos, \
-            self.nearest_tavern_pos = self.ai.decide()
+        self.action, \
+        self.decision, \
+        self.hero_move, \
+        self.nearest_enemy_pos, \
+        self.nearest_mine_pos, \
+        self.nearest_tavern_pos = self.ai.decide()
 
         ################################################################
         # /AI
